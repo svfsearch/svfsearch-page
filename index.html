@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVFSearch — Short-Video Frame Search Benchmark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<!-- ─── SCROLL PROGRESS ──────────────────────────────────── -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ─── HERO ─────────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+    <div class="hero-orb orb-3"></div>
+  </div>
+  <div class="container hero-inner">
+    <h1 class="hero-title">SVFSearch</h1>
+    <p class="hero-subtitle">
+      The First Open Benchmark for Short-Video Frame Search<br />in the Chinese Gaming Vertical
+    </p>
+
+    <div class="author-list">
+      <span class="author">Anonymous Authors</span>
+    </div>
+
+    <div class="button-group">
+      <a class="btn btn-primary" href="https://huggingface.co/datasets/svfsearch/SVFSearchData" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        Dataset (HuggingFace)
+      </a>
+      <a class="btn btn-secondary" href=" https://github.com/SVFSearch/SVFSearch-code" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        Code (GitHub)
+      </a>
+      <a class="btn btn-outline" href="#results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Results
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── OVERVIEW FIGURE ──────────────────────────────────── -->
+<section class="section section-white" id="overview">
+  <div class="container">
+    <div class="fig-full">
+      <img src="assets/figures/main.png" alt="SVFSearch pipeline overview" class="fig-img" />
+      <p class="fig-caption"><strong>Figure 1.</strong> SVFSearch benchmark construction and evaluation pipeline. Starting from raw short-video clips, we construct a frozen offline retrieval environment with text, image, and multimodal indices. Three evaluation protocols — Direct QA, Workflow RAG, and Plan-Act-Replan (PAR) agents — are compared against an Oracle Knowledge upper bound.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABSTRACT ─────────────────────────────────────────── -->
+<section class="section section-gray">
+  <div class="container narrow">
+    <h2 class="section-title">Abstract</h2>
+    <p class="abstract-text">
+      Multimodal large language models are increasingly used as agent backbones that understand multimodal inputs, plan retrieval actions, invoke external tools, and reason over retrieved information.
+      Yet existing benchmarks rarely evaluate this ability in short-video applications, where a paused frame is often visually ambiguous and answering requires vertical, long-tail, and fast-evolving domain knowledge.
+    </p>
+    <p class="abstract-text">
+      We introduce <strong>SVFSearch</strong>, the first open benchmark for short-video frame search in the Chinese gaming domain. SVFSearch contains <strong>5,000</strong> four-choice test examples and 4,198 auxiliary training examples, each centered on a paused game scene from a real short-video clip.
+    </p>
+    <p class="abstract-text">
+      To support fair and reproducible evaluation, SVFSearch provides a <strong>frozen offline retrieval environment</strong> with a game-domain text corpus, a topic-linked image gallery, and text, image, and multimodal retrieval interfaces, avoiding reliance on uncontrolled web search APIs.
+      We evaluate representative paradigms ranging from direct QA and RAG workflow to Plan-Act-Replan agents and learned search models.
+    </p>
+    <p class="abstract-text">
+      Results reveal a large gap between model-only answering, practical agentic search, and oracle knowledge: the best open-source direct-QA model reaches <strong>66.4%</strong>, the best practical agent achieves <strong>79.1%</strong>, and oracle knowledge reaches <strong>95.4%</strong>.
+      Further analysis exposes bottlenecks in visual grounding, retrieval quality, evidence-grounded reasoning, and tool-use behavior, including over-search, answer-only shortcuts, and retrieval-induced misleading.
+    </p>
+  </div>
+</section>
+
+<!-- ─── KEY STATS ─────────────────────────────────────────── -->
+<section class="section section-white">
+  <div class="container">
+    <h2 class="section-title">Benchmark at a Glance</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number" data-count="9198" data-fmt="comma">9,198</span>
+        <span class="stat-label">QA Examples</span>
+        <span class="stat-sub">5,000 test · 4,198 train</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-count="221">221</span>
+        <span class="stat-label">Games Covered</span>
+        <span class="stat-sub">Popular titles in Chinese gaming vertical</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-count="22800" data-fmt="comma">22,800</span>
+        <span class="stat-label">Core Elements</span>
+        <span class="stat-sub">Game-specific knowledge units</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-count="45" data-suffix="K">45K</span>
+        <span class="stat-label">Text Corpus Entries</span>
+        <span class="stat-sub">262K retrieval chunks</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-count="34" data-suffix="K">34K</span>
+        <span class="stat-label">Gallery Images</span>
+        <span class="stat-sub">Topic-linked image index</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">6 × 3</span>
+        <span class="stat-label">Taxonomy</span>
+        <span class="stat-sub">6 categories · 3 difficulty levels</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EXAMPLE ───────────────────────────────────────────── -->
+<section class="section section-gray">
+  <div class="container">
+    <h2 class="section-title">Representative Examples</h2>
+    <p class="section-desc">Each example centers on a <em>paused game frame</em> from a real short-video clip paired with a four-choice question. The system must locate domain-specific evidence from the retrieval environment before answering.</p>
+    <div class="fig-full">
+      <img src="assets/figures/example.png" alt="Representative QA examples" class="fig-img fig-img-contained" />
+      <p class="fig-caption"><strong>Figure 2.</strong> Representative QA examples drawn from different games and question categories, showing the paused frame, question text, answer options, and ground-truth rationale.</p>
+    </div>
+
+    <!-- Case study images -->
+    <h3 class="subsection-title">Case Study Frames</h3>
+    <div class="case-grid">
+      <div class="case-card">
+        <img src="assets/img/case1/151493995688_001.jpg" alt="Game frame case 1a" loading="lazy" />
+        <p class="case-label">Case 1 · Frame A</p>
+      </div>
+      <div class="case-card">
+        <img src="assets/img/case1/151565282692_001.jpg" alt="Game frame case 1b" loading="lazy" />
+        <p class="case-label">Case 1 · Frame B</p>
+      </div>
+      <div class="case-card">
+        <img src="assets/img/case2/161985558701_002.jpg" alt="Game frame case 2a" loading="lazy" />
+        <p class="case-label">Case 2 · Frame A</p>
+      </div>
+      <div class="case-card">
+        <img src="assets/img/case2/162139018519_003.jpg" alt="Game frame case 2b" loading="lazy" />
+        <p class="case-label">Case 2 · Frame B</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DATASET ───────────────────────────────────────────── -->
+<section class="section section-white">
+  <div class="container">
+    <h2 class="section-title">Dataset &amp; Retrieval Environment</h2>
+    <div class="two-col">
+      <div>
+        <h3 class="col-title">Three-Stage Construction Pipeline</h3>
+        <ol class="pipeline-list">
+          <li>
+            <span class="step-num">01</span>
+            <div>
+              <strong>Core Element &amp; Knowledge Construction</strong>
+              <p>Curate 22,800 game-specific elements across 221 games, building a 45K-entry text corpus and 262K retrieval chunks.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">02</span>
+            <div>
+              <strong>Visual Grounding via Short-Video Retrieval</strong>
+              <p>Process 200K+ videos, extract 1M+ frames, and obtain 43K reliable image-element pairs for the topic-linked image gallery.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">03</span>
+            <div>
+              <strong>QA Generation &amp; Quality Filtering</strong>
+              <p>Generate 80K candidate QA pairs and filter to 9,198 high-quality instances with difficulty and category labels.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div>
+        <h3 class="col-title">Frozen Retrieval Indices</h3>
+        <div class="retrieval-cards">
+          <div class="retrieval-item">
+            <span class="ri-icon ri-text">T</span>
+            <div>
+              <strong>Dense Text</strong>
+              <p>Qwen3-Embedding-0.6B · 512-dim · 45K entries</p>
+            </div>
+          </div>
+          <div class="retrieval-item">
+            <span class="ri-icon ri-bm25">B</span>
+            <div>
+              <strong>Sparse BM25</strong>
+              <p>Lexical retrieval over chunked knowledge base</p>
+            </div>
+          </div>
+          <div class="retrieval-item">
+            <span class="ri-icon ri-img">I</span>
+            <div>
+              <strong>Image ANN</strong>
+              <p>DINOv3-Base fine-tuned · 256-dim · 34K images</p>
+            </div>
+          </div>
+          <div class="retrieval-item">
+            <span class="ri-icon ri-mm">M</span>
+            <div>
+              <strong>Multimodal ANN</strong>
+              <p>Qwen3-VL-Embedding-2B · 512-dim</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Categories — full width -->
+    <div class="categories-full">
+      <h3 class="categories-full-title">Question Categories &amp; Difficulty</h3>
+      <div class="categories-tags-row">
+        <div class="cat-group">
+          <span class="cat-group-label">Topic</span>
+          <div class="tag-row tag-row-centered">
+            <span class="tag tag-char">Character</span>
+            <span class="tag tag-equip">Equipment</span>
+            <span class="tag tag-map">Map</span>
+            <span class="tag tag-story">Story</span>
+            <span class="tag tag-mech">Mechanics</span>
+            <span class="tag tag-other">Other</span>
+          </div>
+        </div>
+        <div class="cat-divider"></div>
+        <div class="cat-group">
+          <span class="cat-group-label">Difficulty</span>
+          <div class="tag-row tag-row-centered">
+            <span class="tag tag-easy">Easy</span>
+            <span class="tag tag-med">Medium</span>
+            <span class="tag tag-hard">Hard</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset distribution figure -->
+    <div class="fig-full" style="margin-top:3rem;">
+      <img src="assets/figures/dataset.png" alt="Dataset distribution across categories and difficulty" class="fig-img" />
+      <p class="fig-caption"><strong>Figure 3.</strong> Distribution of SVFSearch examples across question theme, question type, and difficulty levels.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EVALUATION PROTOCOLS ─────────────────────────────── -->
+<section class="section section-gray">
+  <div class="container">
+    <h2 class="section-title">Evaluation Protocols</h2>
+    <p class="section-desc">SVFSearch benchmarks four evaluation settings in a unified frozen environment, enabling controlled comparison from model-only to fully agentic approaches.</p>
+    <div class="protocol-grid">
+      <div class="protocol-card">
+        <div class="proto-icon">⚡</div>
+        <h3>Direct QA</h3>
+        <p>MLLM answers with the paused frame, question, and options — no retrieval tools. Establishes the model-only baseline.</p>
+      </div>
+      <div class="protocol-card">
+        <div class="proto-icon">🔄</div>
+        <h3>Workflow RAG</h3>
+        <p>Fixed image→text pipeline: image ANN retrieves candidate frames, core elements are identified, text ANN fetches relevant knowledge, then the model answers.</p>
+      </div>
+      <div class="protocol-card">
+        <div class="proto-icon">🤖</div>
+        <h3>Plan-Act-Replan (PAR)</h3>
+        <p>LangGraph-based agent dynamically selects among 4 retrieval tools over up to 6 rounds, accumulating and reasoning over evidence adaptively.</p>
+      </div>
+      <div class="protocol-card">
+        <div class="proto-icon">🎯</div>
+        <h3>MMSearch-R1</h3>
+        <p>Learned search model that internalizes tool use via RL training, generating tool calls as part of the decoding process.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RESULTS ───────────────────────────────────────────── -->
+<section class="section section-white" id="results">
+  <div class="container">
+    <h2 class="section-title">Main Results</h2>
+    <p class="section-desc">Accuracy and search rate (SR) on the 5,000-example test split. Oracle Knowledge provides the upper bound of evidence availability.</p>
+
+    <!-- Animated milestone cards -->
+    <div class="milestone-cards">
+      <div class="milestone-card milestone-direct">
+        <span class="milestone-label">Best Open-source Direct QA</span>
+        <span class="milestone-score" data-target="66.4">66.4%</span>
+        <span class="milestone-model">Qwen3.5-27B</span>
+      </div>
+      <div class="milestone-connector">
+        <span class="mc-arrow">&#8594;</span>
+        <span class="mc-gain">+12.7%</span>
+      </div>
+      <div class="milestone-card milestone-agent">
+        <span class="milestone-label">Best PAR Agent</span>
+        <span class="milestone-score" data-target="79.1">79.1%</span>
+        <span class="milestone-model">Qwen3.5-9B</span>
+      </div>
+      <div class="milestone-connector">
+        <span class="mc-arrow">&#8594;</span>
+        <span class="mc-gain">+16.3%</span>
+      </div>
+      <div class="milestone-card milestone-oracle">
+        <span class="milestone-label">Oracle Knowledge</span>
+        <span class="milestone-score" data-target="95.4">95.4%</span>
+        <span class="milestone-model">Qwen3.5-27B</span>
+      </div>
+    </div>
+
+    <!-- Performance bar chart (visual summary) -->
+    <div class="perf-bars">
+      <div class="perf-row">
+        <span class="perf-model">Gemini-3.1-Pro <span class="perf-tag">Direct QA</span></span>
+        <div class="perf-bar-wrap">
+          <div class="perf-bar perf-direct" style="width:77.5%"><span>77.5%</span></div>
+        </div>
+      </div>
+      <div class="perf-row">
+        <span class="perf-model">Qwen3.5-27B <span class="perf-tag">Direct QA</span></span>
+        <div class="perf-bar-wrap">
+          <div class="perf-bar perf-direct" style="width:66.4%"><span>66.4%</span></div>
+        </div>
+      </div>
+      <div class="perf-row">
+        <span class="perf-model">Qwen3.5-27B <span class="perf-tag">Workflow RAG</span></span>
+        <div class="perf-bar-wrap">
+          <div class="perf-bar perf-workflow" style="width:69.4%"><span>69.4%</span></div>
+        </div>
+      </div>
+      <div class="perf-row">
+        <span class="perf-model">Qwen3.5-9B <span class="perf-tag perf-tag-par">PAR Agent</span></span>
+        <div class="perf-bar-wrap">
+          <div class="perf-bar perf-par" style="width:79.1%"><span>79.1%</span></div>
+        </div>
+      </div>
+      <div class="perf-row">
+        <span class="perf-model">Qwen3.5-27B <span class="perf-tag perf-tag-oracle">Oracle Knowledge</span></span>
+        <div class="perf-bar-wrap">
+          <div class="perf-bar perf-oracle" style="width:95.4%"><span>95.4%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full leaderboard table -->
+    <div class="table-wrap">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>Model</th>
+            <th>Acc.</th>
+            <th>SR</th>
+            <th>Char.</th>
+            <th>Equip.</th>
+            <th>Map</th>
+            <th>Story</th>
+            <th>Mech.</th>
+            <th>Easy</th>
+            <th>Med.</th>
+            <th>Hard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-header"><td colspan="12">Proprietary Models (Direct QA)</td></tr>
+          <tr>
+            <td>Direct</td><td>Claude-Opus-4.7</td><td>69.0</td><td>—</td>
+            <td>70.0</td><td>69.0</td><td>66.8</td><td>72.7</td><td>66.2</td>
+            <td>67.9</td><td>68.6</td><td>72.9</td>
+          </tr>
+          <tr>
+            <td>Direct</td><td>GPT-5.4</td><td>67.9</td><td>—</td>
+            <td>69.8</td><td>67.8</td><td>59.7</td><td>69.7</td><td>63.7</td>
+            <td>65.1</td><td>67.7</td><td>70.4</td>
+          </tr>
+          <tr class="best-row">
+            <td>Direct</td><td><strong>Gemini-3.1-Pro</strong></td><td><strong>77.5</strong></td><td>—</td>
+            <td>79.1</td><td>79.6</td><td>69.9</td><td>87.9</td><td>72.3</td>
+            <td>82.5</td><td>78.3</td><td>68.2</td>
+          </tr>
+
+          <tr class="section-header"><td colspan="12">Open-source Direct QA</td></tr>
+          <tr>
+            <td>Direct</td><td>Qwen2.5-VL-7B</td><td>49.8</td><td>—</td>
+            <td>50.8</td><td>47.9</td><td>47.4</td><td>51.5</td><td>48.1</td>
+            <td>57.1</td><td>49.4</td><td>50.2</td>
+          </tr>
+          <tr>
+            <td>Direct</td><td>Qwen3-VL-8B</td><td>54.8</td><td>—</td>
+            <td>56.5</td><td>52.4</td><td>55.1</td><td>66.7</td><td>50.9</td>
+            <td>58.0</td><td>53.8</td><td>61.9</td>
+          </tr>
+          <tr>
+            <td>Direct</td><td>Qwen3-VL-32B</td><td>57.1</td><td>—</td>
+            <td>58.7</td><td>54.3</td><td>53.6</td><td>63.6</td><td>54.4</td>
+            <td>71.2</td><td>56.2</td><td>58.9</td>
+          </tr>
+          <tr>
+            <td>Direct</td><td>Qwen3.5-9B</td><td>59.9</td><td>—</td>
+            <td>61.1</td><td>57.1</td><td>57.1</td><td>60.6</td><td>58.6</td>
+            <td>59.9</td><td>59.2</td><td>65.4</td>
+          </tr>
+          <tr class="best-row">
+            <td>Direct</td><td><strong>Qwen3.5-27B</strong></td><td><strong>66.4</strong></td><td>—</td>
+            <td>68.0</td><td>63.1</td><td>63.8</td><td>75.8</td><td>63.9</td>
+            <td>73.6</td><td>65.5</td><td>71.3</td>
+          </tr>
+
+          <tr class="section-header"><td colspan="12">Open-source Workflow RAG</td></tr>
+          <tr>
+            <td>Workflow</td><td>Qwen2.5-VL-7B</td><td>57.3</td><td>100.0</td>
+            <td>57.7</td><td>58.6</td><td>58.2</td><td>69.7</td><td>54.3</td>
+            <td>59.4</td><td>57.9</td><td>51.0</td>
+          </tr>
+          <tr>
+            <td>Workflow</td><td>Qwen3-VL-8B</td><td>63.5</td><td>100.0</td>
+            <td>64.1</td><td>66.5</td><td>63.3</td><td>60.6</td><td>59.6</td>
+            <td>66.5</td><td>64.3</td><td>55.3</td>
+          </tr>
+          <tr>
+            <td>Workflow</td><td>Qwen3.5-9B</td><td>66.5</td><td>100.0</td>
+            <td>67.5</td><td>67.2</td><td>64.3</td><td>63.6</td><td>63.3</td>
+            <td>70.8</td><td>66.5</td><td>64.4</td>
+          </tr>
+          <tr class="best-row">
+            <td>Workflow</td><td><strong>Qwen3.5-27B</strong></td><td><strong>69.4</strong></td><td>100.0</td>
+            <td>70.8</td><td>69.4</td><td>65.8</td><td>78.8</td><td>65.3</td>
+            <td>70.8</td><td>69.1</td><td>71.0</td>
+          </tr>
+
+          <tr class="section-header"><td colspan="12">Open-source Plan-Act-Replan (PAR) Agent</td></tr>
+          <tr>
+            <td>PAR</td><td>Qwen2.5-VL-7B</td><td>59.3</td><td>85.6</td>
+            <td>59.3</td><td>61.7</td><td>63.3</td><td>54.5</td><td>56.9</td>
+            <td>55.2</td><td>59.8</td><td>56.5</td>
+          </tr>
+          <tr>
+            <td>PAR</td><td>Qwen3-VL-8B</td><td>63.7</td><td>99.7</td>
+            <td>62.8</td><td>66.1</td><td>70.9</td><td>63.6</td><td>63.2</td>
+            <td>66.5</td><td>64.2</td><td>58.3</td>
+          </tr>
+          <tr>
+            <td>PAR</td><td>Qwen3-VL-32B</td><td>71.6</td><td>98.4</td>
+            <td>71.1</td><td>75.9</td><td>74.5</td><td>69.7</td><td>69.4</td>
+            <td>79.7</td><td>72.4</td><td>61.5</td>
+          </tr>
+          <tr class="best-row">
+            <td>PAR</td><td><strong>Qwen3.5-9B</strong></td><td><strong>79.1</strong></td><td>100.0</td>
+            <td>79.3</td><td>82.7</td><td>79.1</td><td>87.9</td><td>76.0</td>
+            <td>75.0</td><td>79.7</td><td>75.9</td>
+          </tr>
+          <tr>
+            <td>PAR</td><td>Qwen3.5-27B</td><td>78.6</td><td>96.8</td>
+            <td>78.3</td><td>83.1</td><td>81.1</td><td>81.8</td><td>75.5</td>
+            <td>79.7</td><td>79.0</td><td>74.5</td>
+          </tr>
+
+          <tr class="section-header"><td colspan="12">Open-source MMSearch-R1</td></tr>
+          <tr>
+            <td>MS-R1</td><td>Qwen2.5-VL-7B</td><td>49.4</td><td>72.8</td>
+            <td>49.1</td><td>53.8</td><td>54.1</td><td>60.6</td><td>46.2</td>
+            <td>49.1</td><td>35.5</td><td>29.8</td>
+          </tr>
+          <tr>
+            <td>MS-R1</td><td>Qwen3-VL-8B</td><td>63.2</td><td>0.02</td>
+            <td>64.5</td><td>60.8</td><td>63.3</td><td>63.6</td><td>61.1</td>
+            <td>70.3</td><td>62.6</td><td>65.6</td>
+          </tr>
+          <tr class="best-row">
+            <td>MS-R1-Game</td><td><strong>Qwen3-VL-8B</strong></td><td><strong>64.5</strong></td><td>68.2</td>
+            <td>65.2</td><td>66.8</td><td>65.3</td><td>63.6</td><td>60.0</td>
+            <td>73.6</td><td>64.3</td><td>61.9</td>
+          </tr>
+
+          <tr class="section-header oracle-header"><td colspan="12">Oracle Knowledge (Upper Bound)</td></tr>
+          <tr>
+            <td>Oracle</td><td>Qwen3-VL-8B</td><td>86.5</td><td>—</td>
+            <td>88.4</td><td>87.5</td><td>87.8</td><td>78.8</td><td>80.3</td>
+            <td>73.1</td><td>87.5</td><td>84.0</td>
+          </tr>
+          <tr>
+            <td>Oracle</td><td>Qwen3-VL-32B</td><td>90.8</td><td>—</td>
+            <td>92.0</td><td>94.1</td><td>88.3</td><td>93.9</td><td>85.4</td>
+            <td>87.7</td><td>91.4</td><td>87.0</td>
+          </tr>
+          <tr>
+            <td>Oracle</td><td>Qwen3.5-9B</td><td>90.3</td><td>—</td>
+            <td>90.7</td><td>91.9</td><td>86.2</td><td>97.0</td><td>88.4</td>
+            <td>91.5</td><td>90.7</td><td>85.8</td>
+          </tr>
+          <tr class="best-row oracle-best">
+            <td>Oracle</td><td><strong>Qwen3.5-27B</strong></td><td><strong>95.4</strong></td><td>—</td>
+            <td>96.0</td><td>96.7</td><td>95.9</td><td>87.9</td><td>93.0</td>
+            <td>94.3</td><td>95.7</td><td>93.5</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ANALYSIS FIGURES ──────────────────────────────────── -->
+<section class="section section-gray">
+  <div class="container">
+    <h2 class="section-title">Analysis</h2>
+
+    <div class="fig-full">
+      <img src="assets/figures/gain_and_circle.png" alt="Retrieval gains and search behavior" class="fig-img" />
+      <p class="fig-caption"><strong>Figure 4.</strong> Retrieval gains and search behavior. Left: accuracy decomposition from Direct QA to Oracle Knowledge, showing gains from Workflow RAG, PAR, and the remaining gap to Oracle. Right: correctness and search-usage breakdown for MS-R1 models.</p>
+    </div>
+
+    <div class="fig-full" style="margin-top:2.5rem;">
+      <img src="assets/figures/tool.png" alt="Tool-use diagnostics" class="fig-img" />
+      <p class="fig-caption"><strong>Figure 5.</strong> Tool-use diagnostics. Left: PAR tool-call counts and accuracy across model scales. Right: item-level search rates and accuracy of MS-R1-style models.</p>
+    </div>
+
+    <!-- Key findings -->
+    <div class="findings-box">
+      <h3>Key Findings</h3>
+      <ul class="findings-list">
+        <li><strong>Large knowledge gap:</strong> Best Direct QA (77.5%) vs. Oracle Knowledge (95.4%) reveals that game-specific evidence is critical — many questions are answerable with evidence but not without it.</li>
+        <li><strong>PAR outperforms fixed workflows:</strong> Qwen3.5-9B with PAR reaches 79.1%, surpassing all Direct QA baselines including Gemini-3.1-Pro, by adaptively coordinating multiple retrieval channels.</li>
+        <li><strong>Scale vs. search volume:</strong> Very small models (0.8B) under-search; medium models (2B) over-search without effective evidence use; large models (27B) balance retrieval frequency and accuracy.</li>
+        <li><strong>RL and answer-only shortcuts:</strong> Outcome-only RL can improve accuracy while suppressing retrieval behavior in multiple-choice settings, requiring task-specific reward design to avoid this failure mode.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CODE ──────────────────────────────────────────────── -->
+<section class="section section-white" id="code">
+  <div class="container">
+    <h2 class="section-title">Code &amp; Reproduction</h2>
+    <p class="section-desc">All evaluation code is open-source. The three main entry points correspond to the three evaluation protocols evaluated in the paper.</p>
+
+    <div class="code-grid">
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-file">run_direct_qa.py</span>
+          <span class="code-badge">Baseline</span>
+        </div>
+        <pre class="code-block"><code>python run_direct_qa.py \
+  --model Qwen3.5-27B \
+  --data data/test.jsonl</code></pre>
+        <p>Direct QA baseline — no retrieval tools, pure MLLM answering with optional knowledge injection.</p>
+      </div>
+
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-file">run_workflow.py</span>
+          <span class="code-badge code-badge-workflow">Workflow RAG</span>
+        </div>
+        <pre class="code-block"><code>python run_workflow.py \
+  --model Qwen3.5-27B \
+  --data data/test.jsonl</code></pre>
+        <p>Fixed image→text retrieval pipeline. Image ANN retrieves frames, core elements are voted, text ANN fetches evidence.</p>
+      </div>
+
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-file">run_agent.py</span>
+          <span class="code-badge code-badge-par">PAR Agent</span>
+        </div>
+        <pre class="code-block"><code>python run_agent.py \
+  --model Qwen3.5-9B \
+  --data data/test.jsonl \
+  --max_rounds 6</code></pre>
+        <p>LangGraph-based Plan-Act-Replan agent. Dynamically selects among 4 retrieval tools over multiple planning rounds.</p>
+      </div>
+    </div>
+
+    <div class="retrieval-services">
+      <h3 class="col-title">Retrieval Services (start before evaluation)</h3>
+      <div class="service-grid">
+        <div class="service-item"><span class="port">:8001</span> Image ANN <code>img_emb_server.py</code></div>
+        <div class="service-item"><span class="port">:8002</span> Knowledge Lookup <code>kn_lookup_server.py</code></div>
+        <div class="service-item"><span class="port">:8003</span> Multimodal ANN <code>multimodal_emb_server.py</code></div>
+        <div class="service-item"><span class="port">:8004</span> Dense Text ANN <code>text_emb_server.py</code></div>
+        <div class="service-item"><span class="port">:8005</span> BM25 <code>bm25_server.py</code></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:2.5rem;">
+      <a class="btn btn-primary" href=" https://github.com/SVFSearch/SVFSearch-code" target="_blank">View Full Code on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DATASET DOWNLOAD ──────────────────────────────────── -->
+<section class="section section-accent">
+  <div class="container narrow" style="text-align:center;">
+    <h2 class="section-title" style="color:#fff;">Get the Dataset</h2>
+    <p style="color:rgba(255,255,255,0.85);font-size:1.05rem;margin-bottom:2rem;">SVFSearch is hosted on HuggingFace. The dataset includes QA pairs, game frame images, text knowledge base, and retrieval indices — all the resources needed to reproduce the benchmark results.</p>
+    <div class="dataset-cards">
+      <div class="ds-card">
+        <span class="ds-num" data-count="9198" data-fmt="comma">9,198</span>
+        <span class="ds-label">QA pairs (JSONL)</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-num" data-count="6415" data-fmt="comma">6,415</span>
+        <span class="ds-label">Game frame images (JPG)</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-num" data-count="262" data-suffix="K">262K</span>
+        <span class="ds-label">Knowledge chunks (JSONL)</span>
+      </div>
+    </div>
+    <a class="btn btn-white" href="https://huggingface.co/datasets/svfsearch/SVFSearchData" target="_blank" style="margin-top:2rem;">
+      Download from HuggingFace
+    </a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <p>SVFSearch · 2026</p>
+    <div class="footer-links">
+      <a href="https://huggingface.co/datasets/svfsearch/SVFSearchData" target="_blank">HuggingFace</a>
+      <a href=" https://github.com/SVFSearch/SVFSearch-code" target="_blank">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
