@@ -154,27 +154,28 @@ a:hover { text-decoration: underline; }
 .btn svg { width: 1em; height: 1em; flex-shrink: 0; }
 
 .btn-primary {
-  background: rgba(124,58,237,.25);
+  background: rgba(124,58,237,.28);
   color: #e0d9ff;
-  border: 1.5px solid rgba(167,139,250,.5);
+  border: 1.5px solid rgba(167,139,250,.45);
   backdrop-filter: blur(6px);
 }
-.btn-primary:hover { background: rgba(124,58,237,.4); border-color: rgba(167,139,250,.75); text-decoration: none; color: #fff; }
+.btn-primary:hover { background: rgba(124,58,237,.42); border-color: rgba(167,139,250,.7); text-decoration: none; color: #fff; }
 
 .btn-secondary {
-  background: rgba(255,255,255,.1);
-  color: rgba(255,255,255,.85);
-  border: 1.5px solid rgba(255,255,255,.22);
-  backdrop-filter: blur(4px);
+  background: rgba(124,58,237,.13);
+  color: rgba(196,181,253,.9);
+  border: 1.5px solid rgba(167,139,250,.28);
+  backdrop-filter: blur(6px);
 }
-.btn-secondary:hover { background: rgba(255,255,255,.18); text-decoration: none; color: #fff; }
+.btn-secondary:hover { background: rgba(124,58,237,.24); border-color: rgba(167,139,250,.5); text-decoration: none; color: #e0d9ff; }
 
 .btn-outline {
-  background: transparent;
-  color: rgba(255,255,255,.65);
-  border: 1.5px solid rgba(255,255,255,.22);
+  background: rgba(124,58,237,.05);
+  color: rgba(196,181,253,.7);
+  border: 1.5px solid rgba(167,139,250,.18);
+  backdrop-filter: blur(4px);
 }
-.btn-outline:hover { background: rgba(255,255,255,.08); text-decoration: none; color: rgba(255,255,255,.9); }
+.btn-outline:hover { background: rgba(124,58,237,.15); border-color: rgba(167,139,250,.38); text-decoration: none; color: rgba(224,217,255,.9); }
 
 .btn-white {
   background: #fff;
@@ -184,12 +185,13 @@ a:hover { text-decoration: underline; }
 }
 
 .btn-arxiv {
-  background: #ffffff;
-  color: #1a1745;
-  border: 1.5px solid #ffffff;
+  background: rgba(124,58,237,.45);
+  color: #fff;
+  border: 1.5px solid rgba(167,139,250,.7);
+  backdrop-filter: blur(6px);
   font-weight: 600;
 }
-.btn-arxiv:hover { background: rgba(255,255,255,.88); border-color: rgba(255,255,255,.88); text-decoration: none; color: #0f0c29; }
+.btn-arxiv:hover { background: rgba(124,58,237,.65); border-color: rgba(167,139,250,.95); text-decoration: none; color: #fff; }
 
 /* ─── Citation Box ──────────────────────────── */
 .citation-box {
