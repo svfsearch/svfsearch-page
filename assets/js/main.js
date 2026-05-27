@@ -204,7 +204,22 @@ if (findingsList && 'IntersectionObserver' in window) {
   flIO.observe(findingsList);
 }
 
-// ─── Copy BibTeX on click ─────────────────────
+// ─── Copy citation BibTeX ─────────────────────
+function copyCitation() {
+  const pre = document.getElementById('citationText');
+  const btn = document.querySelector('.citation-copy-btn');
+  if (!pre || !btn) return;
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg> Copy';
+    }, 2000);
+  });
+}
+
+// ─── Copy BibTeX on click (legacy) ───────────
 const bibtex = document.querySelector('.bibtex-block');
 if (bibtex) {
   bibtex.style.cursor = 'pointer';

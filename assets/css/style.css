@@ -115,6 +115,15 @@ a:hover { text-decoration: underline; }
   line-height: 1.5;
 }
 
+.hero-paper-title {
+  font-size: clamp(.9rem, 2.2vw, 1.15rem);
+  color: rgba(255,255,255,.7);
+  margin: .9rem 0 1.5rem;
+  line-height: 1.55;
+  font-style: italic;
+  max-width: 700px;
+}
+
 .author-list {
   color: rgba(255,255,255,.6);
   font-size: .95rem;
@@ -172,6 +181,54 @@ a:hover { text-decoration: underline; }
   border: none;
   font-weight: 600;
 }
+
+.btn-arxiv {
+  background: #b31b1b;
+  color: #fff;
+  border: 1.5px solid #b31b1b;
+}
+.btn-arxiv:hover { background: #911515; border-color: #911515; text-decoration: none; }
+
+/* ─── Citation Box ──────────────────────────── */
+.citation-box {
+  position: relative;
+  background: var(--gray-900);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-top: 1.25rem;
+  overflow: hidden;
+}
+
+.citation-code {
+  font-family: var(--mono);
+  font-size: .82rem;
+  color: #e5e7eb;
+  line-height: 1.7;
+  white-space: pre;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.citation-copy-btn {
+  position: absolute;
+  top: .85rem;
+  right: .85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .85rem;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.75);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 6px;
+  font-size: .78rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.citation-copy-btn svg { width: .9em; height: .9em; }
+.citation-copy-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
+.citation-copy-btn.copied { background: #16a34a; border-color: #16a34a; color: #fff; }
 .btn-white:hover { background: var(--accent-lt); text-decoration: none; }
 
 /* ─── Section headings ──────────────────────── */

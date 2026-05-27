@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SVFSearch — Short-Video Frame Search Benchmark</title>
+  <title>SVFSearch: A Multimodal Knowledge-Intensive Benchmark for Short-Video Frame Search in the Gaming Vertical Domain</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -23,8 +23,8 @@
   </div>
   <div class="container hero-inner">
     <h1 class="hero-title">SVFSearch</h1>
-    <p class="hero-subtitle">
-      The First Open Benchmark for Short-Video Frame Search<br />in the Chinese Gaming Vertical
+    <p class="hero-paper-title">
+      A Multimodal Knowledge-Intensive Benchmark for Short-Video Frame Search<br />in the Gaming Vertical Domain
     </p>
 
     <div class="author-list">
@@ -32,6 +32,10 @@
     </div>
 
     <div class="button-group">
+      <a class="btn btn-arxiv" href="https://arxiv.org/abs/2605.17946" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Paper (arXiv)
+      </a>
       <a class="btn btn-primary" href="https://huggingface.co/datasets/svfsearch/SVFSearchData" target="_blank">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
         Dataset (HuggingFace)
@@ -619,11 +623,35 @@
   </div>
 </section>
 
+<!-- ─── CITATION ──────────────────────────────────────────── -->
+<section class="section section-white" id="citation">
+  <div class="container narrow">
+    <h2 class="section-title">Citation</h2>
+    <p class="section-desc">If you use SVFSearch in your research, please cite our paper:</p>
+    <div class="citation-box">
+      <button class="citation-copy-btn" onclick="copyCitation()" title="Copy BibTeX">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+        Copy
+      </button>
+      <pre class="citation-code" id="citationText">@misc{mao2026svfsearchmultimodalknowledgeintensivebenchmark,
+      title={SVFSearch: A Multimodal Knowledge-Intensive Benchmark for Short-Video Frame Search in the Gaming Vertical Domain},
+      author={Lingtao Mao and Huangyu Dai and Xinyu Sun and Zihan Liang and Ben Chen and Chenyi Lei and Wenwu Ou},
+      year={2026},
+      eprint={2605.17946},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2605.17946},
+}</pre>
+    </div>
+  </div>
+</section>
+
 <!-- ─── FOOTER ────────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container footer-inner">
     <p>SVFSearch · 2026</p>
     <div class="footer-links">
+      <a href="https://arxiv.org/abs/2605.17946" target="_blank">arXiv</a>
       <a href="https://huggingface.co/datasets/svfsearch/SVFSearchData" target="_blank">HuggingFace</a>
       <a href=" https://github.com/SVFSearch/SVFSearch-code" target="_blank">GitHub</a>
     </div>
