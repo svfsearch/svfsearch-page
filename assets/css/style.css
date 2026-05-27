@@ -154,26 +154,27 @@ a:hover { text-decoration: underline; }
 .btn svg { width: 1em; height: 1em; flex-shrink: 0; }
 
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: 1.5px solid var(--accent);
+  background: rgba(124,58,237,.25);
+  color: #e0d9ff;
+  border: 1.5px solid rgba(167,139,250,.5);
+  backdrop-filter: blur(6px);
 }
-.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); text-decoration: none; }
+.btn-primary:hover { background: rgba(124,58,237,.4); border-color: rgba(167,139,250,.75); text-decoration: none; color: #fff; }
 
 .btn-secondary {
-  background: rgba(255,255,255,.12);
-  color: #fff;
-  border: 1.5px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  border: 1.5px solid rgba(255,255,255,.22);
   backdrop-filter: blur(4px);
 }
-.btn-secondary:hover { background: rgba(255,255,255,.22); text-decoration: none; }
+.btn-secondary:hover { background: rgba(255,255,255,.18); text-decoration: none; color: #fff; }
 
 .btn-outline {
   background: transparent;
-  color: rgba(255,255,255,.8);
-  border: 1.5px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.65);
+  border: 1.5px solid rgba(255,255,255,.22);
 }
-.btn-outline:hover { background: rgba(255,255,255,.08); text-decoration: none; color: #fff; }
+.btn-outline:hover { background: rgba(255,255,255,.08); text-decoration: none; color: rgba(255,255,255,.9); }
 
 .btn-white {
   background: #fff;
@@ -183,11 +184,12 @@ a:hover { text-decoration: underline; }
 }
 
 .btn-arxiv {
-  background: #b31b1b;
-  color: #fff;
-  border: 1.5px solid #b31b1b;
+  background: #ffffff;
+  color: #1a1745;
+  border: 1.5px solid #ffffff;
+  font-weight: 600;
 }
-.btn-arxiv:hover { background: #911515; border-color: #911515; text-decoration: none; }
+.btn-arxiv:hover { background: rgba(255,255,255,.88); border-color: rgba(255,255,255,.88); text-decoration: none; color: #0f0c29; }
 
 /* ─── Citation Box ──────────────────────────── */
 .citation-box {
